@@ -9,28 +9,19 @@
 - **`serika/research-slides`**: 研究発表用の revealjs テーマとフィルタ(MathJax の TeX フォント設定)。
 - **`serika/japanese-et-al-citeproc`**: 日本語文献の "et al." 表記を調整する citeproc 用 Lua フィルタ。
 
-## 導入方法
+## 導入方法・更新方法
 
-利用したいプロジェクトのルートで:
-
-```bash
-quarto add /Users/recky/GitHub/quarto-serika --no-prompt
-```
-
-リモートリポジトリ化した後は GitHub 経由でも追加できる:
+導入も更新も同じで、付属スクリプトで対象プロジェクトへ同期する:
 
 ```bash
-quarto add <owner>/quarto-serika --no-prompt
+/Users/recky/GitHub/quarto-serika/scripts/install.sh <Quartoプロジェクトのパス>
 ```
 
-`_extensions/serika/` 以下に各 extension が vendoring される。
+`_extensions/serika/` 以下に各 extension が vendoring される(対象側の `_extensions/serika/` はこのリポジトリの内容で完全に置き換えられる)。修正はこのリポジトリ側で行い、利用側プロジェクトで再度スクリプトを実行して取り込む。
 
-## 更新方法
+⚠️ `quarto add <ローカルパス>` や `.zip` からの add は使わないこと。`_extensions/serika/<name>/` ではなく `_extensions/<name>/` に(`serika/` の org 階層が飛んで)vendoring され、利用側のパス参照が壊れる(Quarto 1.8.27 で確認)。GitHub リモート化した場合は `quarto add <owner>/quarto-serika` で階層がどうなるかを確認してから移行すること。
 
-このリポジトリ側でファイルを修正した後、利用側プロジェクトで再度取り込む:
+## 利用側プロジェクトの注意
 
-```bash
-quarto add /Users/recky/GitHub/quarto-serika --no-prompt
-# または
-quarto update
-```
+- `.gitignore` で `*.html` や `*.docx` を広く ignore しているプロジェクトでは、`!_extensions/**` の例外を追加すること。これがないと vendoring された `sidebar-toggle.html` や `report.docx` がコミットされず、他のマシンでレンダーが壊れる。
+- vendoring された `_extensions/serika/` は直接編集しない(次回同期で消える)。
