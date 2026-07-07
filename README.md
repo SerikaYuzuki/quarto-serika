@@ -19,7 +19,12 @@
 
 `_extensions/serika/` 以下に各 extension が vendoring される(対象側の `_extensions/serika/` はこのリポジトリの内容で完全に置き換えられる)。修正はこのリポジトリ側で行い、利用側プロジェクトで再度スクリプトを実行して取り込む。
 
-⚠️ `quarto add <ローカルパス>` や `.zip` からの add は使わないこと。`_extensions/serika/<name>/` ではなく `_extensions/<name>/` に(`serika/` の org 階層が飛んで)vendoring され、利用側のパス参照が壊れる(Quarto 1.8.27 で確認)。GitHub リモート化した場合は `quarto add <owner>/quarto-serika` で階層がどうなるかを確認してから移行すること。
+⚠️ `quarto add` はどの形式でも使わないこと(Quarto 1.8.27 で確認):
+
+- ローカルパス / `.zip` から: `_extensions/<name>/` になり `serika/` の org 階層が飛ぶ。
+- GitHub から (`quarto add SerikaYuzuki/quarto-serika`): `_extensions/SerikaYuzuki/<name>/` になる(GitHub のオーナー名が org 階層になる。2026-07-07 確認)。
+
+いずれも利用側の `_extensions/serika/...` パス参照が壊れるため、導入・更新は常に `scripts/install.sh` で行う。別マシンでは `git clone https://github.com/SerikaYuzuki/quarto-serika` してから同スクリプトを実行する。
 
 ## 利用側プロジェクトの注意
 
