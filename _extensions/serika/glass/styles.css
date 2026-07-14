@@ -16,6 +16,39 @@
   pointer-events: none;
 }
 
+/* TOC toggle is a separate navbar control from the left-sidebar menu. */
+.pj-toc-toggle {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.pj-toc-toggle:hover {
+  color: var(--gl-cat0);
+  background: var(--mobile-sidebar-cat-color);
+}
+
+.pj-toc-toggle:focus-visible {
+  outline: 2px solid var(--gl-cat0);
+  outline-offset: 2px;
+}
+
+@media (max-width: 991.98px) {
+  .pj-toc-toggle { display: none; }
+}
+
 @media (min-width: 992px) {
   body.nav-fixed .sidebar,
   body.nav-fixed .headroom-target {
@@ -84,11 +117,35 @@ div.sourceCode pre.sourceCode {
     transform: translateX(0);
   }
 
-  /* 
-   * TOC（右サイドバー）は消さないため、右端のグリッド境界は body-content-end のままにし、
-   * 左側（screen-start-inset）だけ全画面まで広げます。
-   * そして左のパディングのみをアニメーションさせて滑らかに広げます。
-   */
+  /* TOC fades independently while the content consumes/releases its column. */
+  #quarto-margin-sidebar {
+    transition:
+      opacity 0.3s ease-out,
+      transform 0.4s ease-out,
+      visibility 0s linear 0s;
+    transform-origin: right center;
+  }
+
+  body.pj-toc-hidden #quarto-margin-sidebar {
+    opacity: 0;
+    transform: translateX(32px);
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease-out,
+      transform 0.4s ease-out,
+      visibility 0s linear 0.4s;
+  }
+
+  body.pj-toc-showing #quarto-margin-sidebar {
+    opacity: 1;
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* 左サイドバーだけを閉じる場合は右の TOC 列を維持する。
+     左右を同時に閉じる組み合わせは下の専用セレクタで上書きする。 */
   
   /* 開くとき（左側だけ広げる） */
   body.custom-sidebar-hidden .page-columns .content {
@@ -102,6 +159,29 @@ div.sourceCode pre.sourceCode {
     grid-column: screen-start-inset / body-content-end !important;
     max-width: 100% !important;
     animation: shrinkContent 0.4s ease-out forwards;
+  }
+
+  /* grid-column itself cannot interpolate. Padding preserves the old visual
+     width while the content smoothly takes over (or releases) the TOC track. */
+  body.pj-toc-hidden .page-columns .content,
+  body.pj-toc-showing .page-columns .content {
+    grid-column: body-content-start / page-end-inset !important;
+    max-width: 100% !important;
+  }
+
+  body.pj-toc-hidden .page-columns .content {
+    animation: pj-expand-toc-space 0.4s ease-out forwards;
+  }
+
+  body.pj-toc-showing .page-columns .content {
+    animation: pj-shrink-toc-space 0.4s ease-out forwards;
+  }
+
+  body.custom-sidebar-hidden.pj-toc-hidden .page-columns .content,
+  body.custom-sidebar-hidden.pj-toc-showing .page-columns .content,
+  body.custom-sidebar-showing.pj-toc-hidden .page-columns .content,
+  body.custom-sidebar-showing.pj-toc-showing .page-columns .content {
+    grid-column: screen-start-inset / page-end-inset !important;
   }
 
   @keyframes expandContent {
@@ -120,6 +200,25 @@ div.sourceCode pre.sourceCode {
     100% {
       padding-left: 250px;
     }
+  }
+
+  @keyframes pj-expand-toc-space {
+    from { padding-right: 250px; }
+    to   { padding-right: 0; }
+  }
+
+  @keyframes pj-shrink-toc-space {
+    from { padding-right: 0; }
+    to   { padding-right: 250px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #quarto-margin-sidebar,
+  .page-columns .content,
+  .pj-toc-toggle {
+    transition: none !important;
+    animation: none !important;
   }
 }
 
