@@ -41,3 +41,26 @@
 - `.gitignore` で `*.html` や `*.docx` を広く ignore しているプロジェクトでは、`!_extensions/**` の例外を追加すること。これがないと vendoring された `sidebar-toggle.html` や `report.docx` がコミットされず、他のマシンでレンダーが壊れる。
 - vendoring された `_extensions/serika/` は直接編集しない(次回同期で消える)。
 - `serika/glass` は TOC のあるページでデスクトップ navbar に目次切替ボタンを表示する。表示状態は同じタブ内のページ遷移でも維持される。
+
+## ノートの星図（任意機能）
+
+Obsidian風のネットワーク図は既定では読み込まない。利用側の `_quarto.yml` へ次を追加する。
+
+```yaml
+project:
+  post-render:
+    - _extensions/serika/glass/build-network.ts
+
+format:
+  html:
+    include-in-header:
+      - _extensions/serika/glass/network.html
+```
+
+`build-network.ts` は `.qmd` をレンダーせず、front matterとMarkdownリンクだけを読み、出力先の `assets/serika-graph.json` を更新する。単体レンダーでもサイト全体の索引は更新され、JSONの内容が変わらなければファイルを書き直さない。
+
+- 実線: `.qmd` への明示リンク
+- 点線: 共通カテゴリまたは同じディレクトリから各ノート最大2件まで補う関連
+- 除外: `draft: true`、`graph: false`、`_` で始まるファイル、外部リンク
+
+ネットワーク図はnavbarの星図ボタンを押したときだけJSONを読み、Canvasの配置計算を開始する。通常の読書時には描画処理を行わない。
