@@ -4,6 +4,8 @@ project:
   render:
     - "*.qmd"
 
+lang: ja
+
 website:
   title: "Serika Glass UI Lab"
   navbar:
@@ -34,12 +36,13 @@ format:
       dark: _extensions/serika/glass/theme-glass-dark.scss
     css: _extensions/serika/glass/styles.css
     include-in-header:
+      - _extensions/serika/glass/budoux.html
       - _extensions/serika/glass/sidebar-toggle.html
       - _extensions/serika/glass/plotly-config.html
     toc: true
+    toc-title: "このページ"
     toc-location: right
     toc-depth: 3
     code-fold: true
     code-summary: "コードを表示"
     code-copy: true
-
