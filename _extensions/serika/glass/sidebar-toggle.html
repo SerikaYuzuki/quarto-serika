@@ -481,6 +481,48 @@
 
       if (titleBlock && title) {
         titleBlock.classList.add('pj-observatory-hero');
+
+        if (!reducedMotion && window.matchMedia && window.matchMedia('(pointer: fine)').matches) {
+          ['cyan', 'magenta'].forEach(function (tone) {
+            var layer = document.createElement('span');
+            layer.className = 'pj-title-chroma pj-title-chroma-' + tone;
+            layer.setAttribute('aria-hidden', 'true');
+            Array.prototype.slice.call(title.childNodes).forEach(function (node) {
+              if (node.nodeType === Node.ELEMENT_NODE && node.matches('.anchorjs-link, .pj-title-chroma')) return;
+              layer.appendChild(node.cloneNode(true));
+            });
+            title.appendChild(layer);
+          });
+
+          var chromaFrame = 0;
+          var pointerX = -10000;
+          var pointerY = -10000;
+          function renderTitleChroma() {
+            var rect = title.getBoundingClientRect();
+            var nearestX = Math.max(rect.left, Math.min(pointerX, rect.right));
+            var nearestY = Math.max(rect.top, Math.min(pointerY, rect.bottom));
+            var distance = Math.hypot(pointerX - nearestX, pointerY - nearestY);
+            var proximity = Math.max(0, 1 - distance / 150);
+            var horizontal = pointerX < rect.left + rect.width / 2 ? -1 : 1;
+            var vertical = pointerY < rect.top + rect.height / 2 ? -1 : 1;
+            var shift = 0.55 + proximity * 1.25;
+            title.style.setProperty('--pj-chroma-opacity', String(proximity * 0.3));
+            title.style.setProperty('--pj-chroma-cyan-x', (-horizontal * shift) + 'px');
+            title.style.setProperty('--pj-chroma-cyan-y', (-vertical * shift * 0.28) + 'px');
+            title.style.setProperty('--pj-chroma-magenta-x', (horizontal * shift) + 'px');
+            title.style.setProperty('--pj-chroma-magenta-y', (vertical * shift * 0.28) + 'px');
+            chromaFrame = 0;
+          }
+          document.addEventListener('pointermove', function (event) {
+            pointerX = event.clientX;
+            pointerY = event.clientY;
+            if (!chromaFrame) chromaFrame = window.requestAnimationFrame(renderTitleChroma);
+          }, { passive: true });
+          window.addEventListener('blur', function () {
+            title.style.setProperty('--pj-chroma-opacity', '0');
+          });
+        }
+
         var yearMatch = (titleBlock.textContent || '').match(/(?:19|20)\d{2}/);
         var overline = document.createElement('p');
         overline.className = 'pj-hero-overline';

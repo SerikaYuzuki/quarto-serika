@@ -739,9 +739,16 @@ body.pj-drawer-active { overflow: hidden; }
    so they switch automatically when Quarto swaps stylesheets. */
 
 /* --- Listing grid --- */
+.quarto-listing-container-custom {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--pj-reading-width);
+  margin-inline: auto;
+}
+
 .gl-listing {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 500px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   align-items: start;
 }
@@ -771,18 +778,51 @@ body.pj-drawer-active { overflow: hidden; }
 /* --- Card --- */
 .gl-card {
   position: relative;
-  background: var(--gl-card-bg);
-  -webkit-backdrop-filter: blur(var(--gl-card-blur)) saturate(var(--gl-card-sat));
-  backdrop-filter:         blur(var(--gl-card-blur)) saturate(var(--gl-card-sat));
-  border: 1px solid var(--gl-card-border);
-  box-shadow: var(--gl-card-shadow), inset 0 1px 0 var(--gl-card-inset);
-  border-radius: 20px;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--obs-glass-strong) 92%, transparent), var(--obs-glass)),
+    var(--obs-surface-muted);
+  -webkit-backdrop-filter: blur(var(--obs-blur-lg)) saturate(145%);
+  backdrop-filter: blur(var(--obs-blur-lg)) saturate(145%);
+  border: 1px solid var(--obs-border);
+  box-shadow: var(--obs-shadow-float), inset 0 1px 0 var(--obs-border-highlight);
+  border-radius: var(--obs-radius-lg);
   padding: 2rem 2.25rem 1.75rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
+.gl-card::before,
+.gl-card::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+.gl-card::before {
+  inset: 0;
+  opacity: 0.58;
+  background:
+    radial-gradient(circle at var(--pj-card-star-x, 82%) var(--pj-card-star-y, 24%), color-mix(in srgb, var(--obs-accent-cyan) 22%, transparent) 0 2px, transparent 3px),
+    radial-gradient(circle at var(--pj-card-orbit-x, 78%) var(--pj-card-orbit-y, 35%), transparent 0 3.2rem, color-mix(in srgb, var(--obs-accent) 15%, transparent) 3.25rem 3.32rem, transparent 3.38rem),
+    linear-gradient(var(--pj-card-angle, 132deg), transparent 58%, color-mix(in srgb, var(--obs-accent-magenta) 8%, transparent));
+}
+.gl-card::after {
+  width: 11rem;
+  aspect-ratio: 1;
+  inset: var(--pj-card-inset, -4.8rem -2.7rem auto auto);
+  border: 1px solid color-mix(in srgb, var(--obs-accent-cyan) 14%, transparent);
+  border-radius: var(--pj-card-radius, 50%);
+  transform: rotate(var(--pj-card-rotate, 0deg));
+  box-shadow: 0 0 0 2.2rem color-mix(in srgb, var(--obs-accent) 2.5%, transparent);
+}
+.gl-card-wrap:nth-child(6n + 2) .gl-card { --pj-card-star-x: 18%; --pj-card-star-y: 76%; --pj-card-orbit-x: 22%; --pj-card-orbit-y: 70%; --pj-card-angle: 28deg; --pj-card-inset: auto auto -5rem -3rem; }
+.gl-card-wrap:nth-child(6n + 3) .gl-card { --pj-card-star-x: 68%; --pj-card-star-y: 18%; --pj-card-orbit-x: 73%; --pj-card-orbit-y: 28%; --pj-card-angle: 205deg; --pj-card-radius: 18%; --pj-card-rotate: 24deg; }
+.gl-card-wrap:nth-child(6n + 4) .gl-card { --pj-card-star-x: 14%; --pj-card-star-y: 22%; --pj-card-orbit-x: 25%; --pj-card-orbit-y: 30%; --pj-card-angle: 315deg; --pj-card-inset: -5.2rem auto auto -2.4rem; }
+.gl-card-wrap:nth-child(6n + 5) .gl-card { --pj-card-star-x: 88%; --pj-card-star-y: 72%; --pj-card-orbit-x: 76%; --pj-card-orbit-y: 67%; --pj-card-angle: 72deg; --pj-card-radius: 28%; --pj-card-rotate: 45deg; --pj-card-inset: auto -2.4rem -5rem auto; }
+.gl-card-wrap:nth-child(6n + 6) .gl-card { --pj-card-star-x: 42%; --pj-card-star-y: 16%; --pj-card-orbit-x: 48%; --pj-card-orbit-y: 22%; --pj-card-angle: 168deg; --pj-card-radius: 8%; --pj-card-rotate: 12deg; --pj-card-inset: -5.8rem 22% auto auto; }
 .gl-card > :not(.gl-card-cover-wrap) {
   position: relative;
   z-index: 2;
@@ -790,7 +830,7 @@ body.pj-drawer-active { overflow: hidden; }
 }
 .gl-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--gl-card-shadow-lg), inset 0 1px 0 var(--gl-card-inset);
+  box-shadow: var(--obs-shadow-float), 0 0 0 1px color-mix(in srgb, var(--obs-accent) 16%, transparent), inset 0 1px 0 var(--obs-border-highlight);
 }
 
 /* --- Eyebrow pill --- */
@@ -1059,11 +1099,13 @@ body.pj-drawer-active { overflow: hidden; }
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--pj-floating-navbar-clearance) + 1rem);
+  overflow-x: clip;
 }
 
 body {
   isolation: isolate;
   color: var(--obs-text);
+  overflow-x: clip;
 }
 
 body::before,
@@ -1264,6 +1306,8 @@ body::after {
 }
 
 .pj-observatory-hero .title {
+  position: relative;
+  isolation: isolate;
   max-width: 17ch;
   margin-bottom: 0.65rem;
   color: var(--obs-text) !important;
@@ -1271,6 +1315,27 @@ body::after {
   line-height: 0.98 !important;
   letter-spacing: -0.045em !important;
   animation: pj-hero-enter var(--obs-duration-narrative) var(--obs-ease-spring) both;
+}
+
+.pj-title-chroma {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  opacity: var(--pj-chroma-opacity, 0);
+  pointer-events: none;
+  transition: opacity 150ms ease, transform 150ms ease;
+  will-change: opacity, transform;
+}
+
+.pj-title-chroma-cyan {
+  color: var(--obs-accent-cyan);
+  transform: translate3d(var(--pj-chroma-cyan-x, 0), var(--pj-chroma-cyan-y, 0), 0);
+}
+
+.pj-title-chroma-magenta {
+  color: var(--obs-accent-magenta);
+  transform: translate3d(var(--pj-chroma-magenta-x, 0), var(--pj-chroma-magenta-y, 0), 0);
 }
 
 .pj-observatory-hero .subtitle {
@@ -1694,12 +1759,14 @@ body::after {
   body::after,
   #title-block-header.pj-observatory-hero::before,
   .pj-observatory-hero .title,
+  .pj-title-chroma,
   .pj-observatory-hero .subtitle,
   .pj-chapter > h2,
   #pj-reading-status.pj-reading-complete {
     animation: none !important;
     transition: none !important;
   }
+  .pj-title-chroma { display: none; }
   .pj-chapter > h2 { opacity: 1; transform: none; }
   .pj-reading-progress-bar { transition: none; }
 }

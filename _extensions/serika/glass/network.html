@@ -1,21 +1,55 @@
 <style>
   .pj-network-toggle {
     appearance: none;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    display: inline-grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    position: fixed;
+    z-index: 995;
+    right: clamp(0.75rem, 2vw, 1.5rem);
+    bottom: calc(clamp(0.75rem, 2vw, 1.5rem) + 4.4rem);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--obs-border, rgba(145, 156, 190, .28));
+    background: var(--obs-glass-strong, rgba(24, 28, 48, .84));
+    color: var(--obs-text, inherit);
     border-radius: 999px;
+    box-shadow: var(--obs-shadow-soft, 0 12px 32px rgba(3, 5, 14, .2));
+    -webkit-backdrop-filter: blur(var(--obs-blur-sm, 14px)) saturate(150%);
+    backdrop-filter: blur(var(--obs-blur-sm, 14px)) saturate(150%);
     cursor: pointer;
+    transition: right var(--pj-layout-duration, 380ms) var(--pj-layout-ease, ease), color 180ms ease, background-color 180ms ease, transform 180ms ease;
   }
   .pj-network-toggle:hover,
   .pj-network-toggle:focus-visible {
     color: var(--obs-accent, #9b87ff);
-    background: color-mix(in srgb, var(--obs-accent, #9b87ff) 12%, transparent);
+    background: color-mix(in srgb, var(--obs-accent, #9b87ff) 13%, var(--obs-glass-strong, rgba(24, 28, 48, .84)));
+    transform: translateY(-2px);
     outline: none;
+  }
+  .pj-network-toggle span {
+    font-family: var(--bs-font-sans-serif, system-ui, sans-serif);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  @media (min-width: 992px) {
+    body[data-pj-right="open"] .pj-network-toggle {
+      right: calc(var(--pj-frame-edge, 18px) + var(--pj-rail-width, 232px) + var(--pj-rail-gutter, 24px));
+    }
+  }
+  @media (max-width: 991.98px) {
+    .pj-network-toggle {
+      right: 0.5rem;
+      bottom: 4.75rem;
+      width: 2.75rem;
+      padding: 0;
+      justify-content: center;
+    }
+    .pj-network-toggle span { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pj-network-toggle { transition: none; }
   }
 </style>
 <script>
@@ -82,17 +116,17 @@
         '<dialog aria-labelledby="network-title">',
           '<div class="shell">',
             '<header>',
-              '<div><span class="eyebrow">Knowledge constellation</span><h2 id="network-title">ノートの星図</h2></div>',
+              '<div><span class="eyebrow">Knowledge constellation</span><h2 id="network-title">記事の星図</h2></div>',
               '<div class="header-tools"><div class="modes" role="group" aria-label="表示範囲"><button type="button" data-mode="local" aria-pressed="true">周辺</button><button type="button" data-mode="all" aria-pressed="false">全体</button></div><button class="icon close" type="button" aria-label="閉じる">×</button></div>',
             '</header>',
             '<div class="stage">',
               '<canvas role="img" aria-label="記事同士のリンクを表すネットワーク図"></canvas>',
-              '<div class="floating"><input class="search" type="search" placeholder="ノートを検索" aria-label="ノートを検索"></div>',
+              '<div class="floating"><input class="search" type="search" placeholder="記事を検索" aria-label="記事を検索"></div>',
               '<div class="zoom"><button type="button" data-zoom="in" aria-label="拡大">＋</button><button type="button" data-zoom="out" aria-label="縮小">−</button><button type="button" data-zoom="reset" aria-label="表示をリセット">◎</button></div>',
               '<div class="legend"><i></i>リンク <i class="related"></i>関連</div>',
               '<div class="loading">星図を読み込んでいます…</div>',
             '</div>',
-            '<footer><div class="selection"><strong>ノートを選択</strong><span>点を選ぶと概要を表示します。ダブルクリックで移動します。</span></div><a class="open-link" hidden>開く</a></footer>',
+            '<footer><div class="selection"><strong>記事を選択</strong><span>点を選ぶと概要を表示します。ダブルクリックで移動します。</span></div><a class="open-link" hidden>開く</a></footer>',
           '</div>',
         '</dialog>'
       ].join('');
@@ -439,7 +473,7 @@
       var detail = this.shadowRoot.querySelector('.selection span');
       var link = this.shadowRoot.querySelector('.open-link');
       if (!this.selectedNode) {
-        title.textContent = 'ノートを選択';
+        title.textContent = '記事を選択';
         detail.textContent = '点を選ぶと概要を表示します。ダブルクリックで移動します。';
         link.hidden = true;
         return;
@@ -455,18 +489,16 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector('serika-network')) return;
-    var tools = document.querySelector('.quarto-navbar-tools');
-    if (!tools) return;
     var network = document.createElement('serika-network');
     document.body.appendChild(network);
     var button = document.createElement('button');
     button.type = 'button';
-    button.className = 'pj-network-toggle quarto-navigation-tool';
-    button.setAttribute('aria-label', 'ノートの星図を開く');
-    button.title = 'ノートの星図';
-    button.innerHTML = '<i class="bi bi-diagram-3" aria-hidden="true"></i>';
+    button.className = 'pj-network-toggle';
+    button.setAttribute('aria-label', '記事の星図を開く');
+    button.title = '記事の星図';
+    button.innerHTML = '<i class="bi bi-diagram-3" aria-hidden="true"></i><span>記事の星図</span>';
     button.addEventListener('click', function () { network.open(); });
-    tools.insertBefore(button, tools.firstChild);
+    document.body.appendChild(button);
   });
 })();
 </script>
