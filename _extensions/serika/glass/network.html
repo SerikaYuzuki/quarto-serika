@@ -1,55 +1,22 @@
 <style>
   .pj-network-toggle {
     appearance: none;
-    position: fixed;
-    z-index: 995;
-    right: clamp(0.75rem, 2vw, 1.5rem);
-    bottom: calc(clamp(0.75rem, 2vw, 1.5rem) + 4.4rem);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    min-height: 2.75rem;
-    padding: 0 0.9rem;
-    border: 1px solid var(--obs-border, rgba(145, 156, 190, .28));
-    background: var(--obs-glass-strong, rgba(24, 28, 48, .84));
-    color: var(--obs-text, inherit);
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
     border-radius: 999px;
-    box-shadow: var(--obs-shadow-soft, 0 12px 32px rgba(3, 5, 14, .2));
-    -webkit-backdrop-filter: blur(var(--obs-blur-sm, 14px)) saturate(150%);
-    backdrop-filter: blur(var(--obs-blur-sm, 14px)) saturate(150%);
     cursor: pointer;
-    transition: right var(--pj-layout-duration, 380ms) var(--pj-layout-ease, ease), color 180ms ease, background-color 180ms ease, transform 180ms ease;
   }
   .pj-network-toggle:hover,
   .pj-network-toggle:focus-visible {
     color: var(--obs-accent, #9b87ff);
-    background: color-mix(in srgb, var(--obs-accent, #9b87ff) 13%, var(--obs-glass-strong, rgba(24, 28, 48, .84)));
-    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--obs-accent, #9b87ff) 12%, transparent);
     outline: none;
-  }
-  .pj-network-toggle span {
-    font-family: var(--bs-font-sans-serif, system-ui, sans-serif);
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-  }
-  @media (min-width: 992px) {
-    body[data-pj-right="open"] .pj-network-toggle {
-      right: calc(var(--pj-frame-edge, 18px) + var(--pj-rail-width, 232px) + var(--pj-rail-gutter, 24px));
-    }
-  }
-  @media (max-width: 991.98px) {
-    .pj-network-toggle {
-      right: 0.5rem;
-      bottom: 4.75rem;
-      width: 2.75rem;
-      padding: 0;
-      justify-content: center;
-    }
-    .pj-network-toggle span { display: none; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .pj-network-toggle { transition: none; }
   }
 </style>
 <script>
@@ -489,16 +456,18 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector('serika-network')) return;
+    var tools = document.querySelector('.quarto-navbar-tools');
+    if (!tools) return;
     var network = document.createElement('serika-network');
     document.body.appendChild(network);
     var button = document.createElement('button');
     button.type = 'button';
-    button.className = 'pj-network-toggle';
+    button.className = 'pj-network-toggle quarto-navigation-tool';
     button.setAttribute('aria-label', '記事の星図を開く');
     button.title = '記事の星図';
-    button.innerHTML = '<i class="bi bi-diagram-3" aria-hidden="true"></i><span>記事の星図</span>';
+    button.innerHTML = '<i class="bi bi-diagram-3" aria-hidden="true"></i>';
     button.addEventListener('click', function () { network.open(); });
-    document.body.appendChild(button);
+    tools.insertBefore(button, tools.firstChild);
   });
 })();
 </script>

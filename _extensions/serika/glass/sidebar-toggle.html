@@ -1,6 +1,27 @@
 <script>(function () {
   "use strict";
 
+  // Load the two site-wide TeX extensions before Quarto starts MathJax.
+  // This keeps individual .qmd files free from repeated \require commands.
+  var mathJaxConfig = window.MathJax = window.MathJax || {};
+  var mathJaxLoader = mathJaxConfig.loader = mathJaxConfig.loader || {};
+  var mathJaxLoad = mathJaxLoader.load = mathJaxLoader.load || [];
+  ['[tex]/physics', '[tex]/mhchem'].forEach(function (component) {
+    if (mathJaxLoad.indexOf(component) < 0) mathJaxLoad.push(component);
+  });
+  var mathJaxTex = mathJaxConfig.tex = mathJaxConfig.tex || {};
+  var mathJaxPackages = mathJaxTex.packages = mathJaxTex.packages || {};
+  if (Array.isArray(mathJaxPackages)) {
+    ['physics', 'mhchem'].forEach(function (name) {
+      if (mathJaxPackages.indexOf(name) < 0) mathJaxPackages.push(name);
+    });
+  } else {
+    var mathJaxAdditions = mathJaxPackages['[+]'] = mathJaxPackages['[+]'] || [];
+    ['physics', 'mhchem'].forEach(function (name) {
+      if (mathJaxAdditions.indexOf(name) < 0) mathJaxAdditions.push(name);
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     var body = document.body;
     var reducedMotion = window.matchMedia &&
@@ -331,6 +352,17 @@
 
     // ── P2: 小さな操作フィードバック --------------------------------------
     document.addEventListener('click', function (event) {
+      var sidebarSectionToggle = event.target.closest('#quarto-sidebar .sidebar-item-toggle, #pj-drawer-body .sidebar-item-toggle');
+      if (sidebarSectionToggle && !reducedMotion) {
+        var chevron = sidebarSectionToggle.querySelector('.bi-chevron-right');
+        if (chevron) {
+          chevron.classList.remove('pj-chevron-highlight');
+          void chevron.offsetWidth;
+          chevron.classList.add('pj-chevron-highlight');
+          window.setTimeout(function () { chevron.classList.remove('pj-chevron-highlight'); }, 480);
+        }
+      }
+
       var calloutHeader = event.target.closest('.callout-header[data-bs-toggle="collapse"]');
       if (calloutHeader && !reducedMotion) {
         var callout = calloutHeader.closest('.callout');

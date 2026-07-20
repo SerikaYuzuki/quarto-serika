@@ -41,6 +41,7 @@
 - `.gitignore` で `*.html` や `*.docx` を広く ignore しているプロジェクトでは、`!_extensions/**` の例外を追加すること。これがないと vendoring された `sidebar-toggle.html` や `report.docx` がコミットされず、他のマシンでレンダーが壊れる。
 - vendoring された `_extensions/serika/` は直接編集しない(次回同期で消える)。
 - `serika/glass` は TOC のあるページでデスクトップ navbar に目次切替ボタンを表示する。表示状態は同じタブ内のページ遷移でも維持される。
+- `serika/glass` は MathJax の `physics` と `mhchem` を全ページで先に読み込む。各 `.qmd` に `\require{physics}` / `\require{mhchem}` を書く必要はない。
 
 ## 記事の星図（任意機能）
 
