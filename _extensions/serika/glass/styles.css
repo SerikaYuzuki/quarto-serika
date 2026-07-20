@@ -615,6 +615,10 @@ body.pj-drawer-active { overflow: hidden; }
 #pj-drawer-toc a.active {
   background: var(--mobile-sidebar-cat-color);
 }
+#pj-drawer-toc a.active {
+  color: color-mix(in srgb, var(--obs-accent-cyan) 48%, var(--obs-text)) !important;
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--obs-accent-cyan) 72%, transparent);
+}
 
 @media (max-width: 991.98px) {
   body #quarto-sidebar,
@@ -858,7 +862,7 @@ body.pj-drawer-active { overflow: hidden; }
 }
 
 /* --- Eyebrow pill --- */
-.gl-eyebrow { margin-bottom: 1.1rem; }
+.gl-eyebrow { margin-bottom: 0.7rem; }
 .gl-eyebrow-pill {
   display: inline-block;
   background: var(--gl-card-bg-subtle);
@@ -880,7 +884,7 @@ body.pj-drawer-active { overflow: hidden; }
   letter-spacing: -0.025em;
   line-height: 1.2;
   color: var(--gl-title-color, #1f1c38) !important;
-  margin: 0 0 0.8rem 0;
+  margin: 0 0 0.8rem 0 !important;
   flex-shrink: 0;
 }
 
@@ -1458,7 +1462,7 @@ body::after {
 /* Chapter landmarks */
 .pj-chapter {
   --pj-chapter-color: var(--obs-accent);
-  margin-top: clamp(3.5rem, 8vw, 6.5rem);
+  margin-top: clamp(1.2rem, 2.7vw, 2.2rem);
 }
 
 .pj-chapter:nth-of-type(4n + 1) { --pj-chapter-color: var(--obs-accent); }
@@ -1698,6 +1702,17 @@ body::after {
     padding-inline-start: 0.55rem;
   }
 
+  #TOC .nav-link {
+    border-radius: 0.45rem;
+    transition: color 180ms ease, background-color 180ms ease, text-shadow 180ms ease;
+  }
+
+  #TOC .nav-link.active {
+    color: color-mix(in srgb, var(--obs-accent-cyan) 48%, var(--obs-text)) !important;
+    background: color-mix(in srgb, var(--obs-accent-cyan) 7%, transparent);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--obs-accent-cyan) 18%, transparent);
+  }
+
   #TOC::before,
   #TOC::after { content: none; }
 }
@@ -1756,7 +1771,7 @@ body::after {
   .pj-hero-stat { padding: 0.6rem; }
   .pj-hero-shortcuts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pj-hero-shortcuts a { padding-inline: 0.45rem; font-size: 0.86rem; }
-  .pj-chapter { margin-top: 3.75rem; }
+  .pj-chapter { margin-top: 1.25rem; }
   .pj-chapter > h2 { font-size: clamp(1.45rem, 7vw, 1.9rem); }
   #pj-reading-status {
     right: 0.5rem;
