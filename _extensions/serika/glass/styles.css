@@ -1707,10 +1707,21 @@ body::after {
     transition: color 180ms ease, background-color 180ms ease, text-shadow 180ms ease;
   }
 
-  #TOC .nav-link.active {
+  #TOC .nav-link:is(.active, .pj-toc-current) {
     color: color-mix(in srgb, var(--obs-accent-cyan) 48%, var(--obs-text)) !important;
     background: color-mix(in srgb, var(--obs-accent-cyan) 7%, transparent);
     text-shadow: 0 0 10px color-mix(in srgb, var(--obs-accent-cyan) 18%, transparent);
+  }
+
+  #TOC .nav-link.pj-toc-current {
+    font-weight: 650;
+  }
+
+  #TOC .nav-link.active:not(.pj-toc-current) {
+    color: var(--obs-text-muted) !important;
+    background: transparent;
+    font-weight: 500;
+    text-shadow: none;
   }
 
   #TOC::before,
