@@ -1,0 +1,45 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+
+website:
+  title: "Serika Glass UI Lab"
+  navbar:
+    pinned: false
+    left:
+      - href: index.qmd
+        text: Components
+      - href: layout-states.qmd
+        text: Layout states
+    right:
+      - icon: github
+        href: https://github.com/SerikaYuzuki/quarto-serika
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - href: index.qmd
+        text: Component gallery
+      - href: layout-states.qmd
+        text: Layout and motion
+  page-navigation: true
+  back-to-top-navigation: true
+
+format:
+  html:
+    theme:
+      light: _extensions/serika/glass/theme-glass-light.scss
+      dark: _extensions/serika/glass/theme-glass-dark.scss
+    css: _extensions/serika/glass/styles.css
+    include-in-header:
+      - _extensions/serika/glass/sidebar-toggle.html
+      - _extensions/serika/glass/plotly-config.html
+    toc: true
+    toc-location: right
+    toc-depth: 3
+    code-fold: true
+    code-summary: "コードを表示"
+    code-copy: true
+

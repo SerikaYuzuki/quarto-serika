@@ -9,6 +9,16 @@
 - **`serika/research-slides`**: 研究発表用の revealjs テーマとフィルタ(MathJax の TeX フォント設定)。
 - **`serika/japanese-et-al-citeproc`**: 日本語文献の "et al." 表記を調整する citeproc 用 Lua フィルタ。
 
+## Glass UI Lab
+
+`serika/glass` の変更前後を同じfixtureで比較する専用Quartoサイトを `test-site/` に置いている。
+
+```bash
+./test-site/render.sh
+```
+
+`render.sh` は正本のextensionをテストサイトへ同期してからレンダーする。検討中の改善方針、現状の実測値、受け入れ基準は [`GLASS_UI_REFINEMENT_PLAN_2026-07-19.md`](GLASS_UI_REFINEMENT_PLAN_2026-07-19.md) を参照。
+
 ## 導入方法・更新方法
 
 導入も更新も同じで、付属スクリプトで対象プロジェクトへ同期する:
