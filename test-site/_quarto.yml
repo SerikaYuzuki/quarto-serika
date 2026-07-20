@@ -39,6 +39,7 @@ format:
       - _extensions/serika/glass/budoux.html
       - _extensions/serika/glass/sidebar-toggle.html
       - _extensions/serika/glass/plotly-config.html
+      - _extensions/serika/glass/selection-ai.html
     toc: true
     toc-title: "このページ"
     toc-location: right
