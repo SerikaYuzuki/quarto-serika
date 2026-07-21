@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# extensionを含むマージ後だけ、ローカルの利用サイトへ同期する。
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+
+if [ "${SERIKA_SKIP_SIBLING_SYNC:-0}" = "1" ]; then
+  echo "post-merge: sibling sync skipped (SERIKA_SKIP_SIBLING_SYNC=1)"
+  exit 0
+fi
+
+if ! git -C "$repo_root" rev-parse --verify ORIG_HEAD >/dev/null 2>&1; then
+  exit 0
+fi
+if git -C "$repo_root" diff --quiet ORIG_HEAD HEAD -- _extensions/serika; then
+  exit 0
+fi
+
+echo "post-merge: syncing quarto-serika to sibling sites"
+"$repo_root/scripts/sync-sibling-sites.sh"

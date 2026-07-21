@@ -36,6 +36,35 @@
 
 いずれも利用側の `_extensions/serika/...` パス参照が壊れるため、導入・更新は常に `scripts/install.sh` で行う。別マシンでは `git clone https://github.com/SerikaYuzuki/quarto-serika` してから同スクリプトを実行する。
 
+## マージ後のローカル同期
+
+`serika` extensionを変更したブランチをマージした後は、同じディレクトリにある `Developing-Journal` と `PersonalJournal` へ同期し、両方をフルレンダーする。手作業で忘れないよう、このcheckoutでは最初に追跡済みの `post-merge` フックを有効化する。
+
+```bash
+./scripts/install-git-hooks.sh
+```
+
+有効化後、`_extensions/serika/` に差分を含むマージが完了すると、`.githooks/post-merge` が自動的に次を実行する。
+
+1. 両サイトの `_extensions/serika/` と `_quarto.yml` に未コミット変更がないことを確認する。
+2. `scripts/install.sh` でextensionを同期する。
+3. `selection-ai.html` が利用側の `include-in-header` に無ければ追加する。
+4. 各サイトで `quarto render` を実行する。
+
+手動で同じ処理を実行する場合:
+
+```bash
+./scripts/sync-sibling-sites.sh
+```
+
+対象側のextensionまたは設定に未コミット変更がある場合は、上書きせずエラーで停止する。緊急時にマージ後の自動同期だけを抑止する場合は、次のように環境変数を付ける。
+
+```bash
+SERIKA_SKIP_SIBLING_SYNC=1 git merge <branch>
+```
+
+Gitの `post-merge` はマージ自体を取り消せないため、自動同期やレンダーに失敗した場合もマージは完了済みである。原因を直した後、`./scripts/sync-sibling-sites.sh` を再実行する。
+
 ## 利用側プロジェクトの注意
 
 - `.gitignore` で `*.html` や `*.docx` を広く ignore しているプロジェクトでは、`!_extensions/**` の例外を追加すること。これがないと vendoring された `sidebar-toggle.html` や `report.docx` がコミットされず、他のマシンでレンダーが壊れる。
