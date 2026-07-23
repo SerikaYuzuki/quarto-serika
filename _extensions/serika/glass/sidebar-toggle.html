@@ -31,6 +31,16 @@
     var sidebar = document.getElementById('quarto-sidebar');
     var marginSidebar = document.getElementById('quarto-margin-sidebar');
     var toc = marginSidebar && marginSidebar.querySelector('#TOC, .sidebar-toc');
+    var tocScrollRegion = null;
+    if (toc) {
+      var tocList = toc.querySelector(':scope > ul');
+      if (tocList) {
+        tocScrollRegion = document.createElement('div');
+        tocScrollRegion.className = 'pj-toc-scroll-region';
+        toc.insertBefore(tocScrollRegion, tocList);
+        tocScrollRegion.appendChild(tocList);
+      }
+    }
     var navbarTools = document.querySelector('.quarto-navbar-tools');
     var brandContainer = document.querySelector('.navbar-brand-container');
     var LEFT_STORAGE_KEY = 'serika-glass-left-visible';
@@ -407,6 +417,63 @@
         window.setTimeout(function () { body.classList.remove('pj-theme-transition'); }, 360);
       }
     }, true);
+
+    // Quarto ScrollSpy remains the sole owner of `.active`. Quarto can retain
+    // an ancestor/first entry while activating the current descendant, so the
+    // rail projects the last active link in document order to one visual state.
+    // The mobile drawer clone is outside `toc` and never participates.
+    if (toc && tocScrollRegion && !mobilePerformanceMode) {
+      var visibleTocCurrent = null;
+      var tocProjectionFrame = 0;
+
+      function revealVisibleTocCurrent(link) {
+        var regionRect = tocScrollRegion.getBoundingClientRect();
+        var linkRect = link.getBoundingClientRect();
+        var inset = 8;
+        if (linkRect.top < regionRect.top + inset) {
+          tocScrollRegion.scrollTop += linkRect.top - regionRect.top - inset;
+        } else if (linkRect.bottom > regionRect.bottom - inset) {
+          tocScrollRegion.scrollTop += linkRect.bottom - regionRect.bottom + inset;
+        }
+      }
+
+      function projectVisibleTocCurrent() {
+        tocProjectionFrame = 0;
+        var nativeActiveLinks = Array.prototype.slice.call(
+          toc.querySelectorAll('a.nav-link.active')
+        ).filter(function (link) {
+          return tocScrollRegion.contains(link);
+        });
+        var next = nativeActiveLinks.length
+          ? nativeActiveLinks[nativeActiveLinks.length - 1]
+          : visibleTocCurrent;
+        if (!next) return;
+
+        toc.querySelectorAll('a.pj-toc-visible-current').forEach(function (link) {
+          if (link !== next) link.classList.remove('pj-toc-visible-current');
+        });
+        if (!next.classList.contains('pj-toc-visible-current')) {
+          next.classList.add('pj-toc-visible-current');
+        }
+        visibleTocCurrent = next;
+        window.requestAnimationFrame(function () { revealVisibleTocCurrent(next); });
+      }
+
+      function requestTocProjection() {
+        if (!tocProjectionFrame) {
+          tocProjectionFrame = window.requestAnimationFrame(projectVisibleTocCurrent);
+        }
+      }
+
+      projectVisibleTocCurrent();
+      var tocActiveObserver = new MutationObserver(requestTocProjection);
+      tocActiveObserver.observe(tocScrollRegion, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class']
+      });
+      window.addEventListener('resize', requestTocProjection, { passive: true });
+    }
 
     // ── Prismatic Mathematical Observatory: Phase 1 reading layer ---------
     var article = document.getElementById('quarto-document-content');

@@ -1734,6 +1734,7 @@ body::after {
 
   #quarto-sidebar > .sidebar-menu-container {
     min-height: 0;
+    padding-top: 0 !important;
     overflow: auto;
   }
 
@@ -1745,6 +1746,13 @@ body::after {
   #TOC > #toc-title {
     box-sizing: border-box;
     min-height: var(--pj-rail-label-row);
+  }
+
+  #quarto-sidebar > .sidebar-menu-container > ul > .sidebar-item:first-child .sidebar-link {
+    display: flex;
+    align-items: center;
+    min-height: var(--pj-rail-label-row);
+    padding-block: 0;
   }
 
   #TOC {
@@ -1773,15 +1781,18 @@ body::after {
     margin: 0;
   }
 
-  #TOC > ul {
+  #TOC > .pj-toc-scroll-region {
     grid-row: 3;
     min-height: 0;
-    margin: 0;
-    padding-bottom: 0.75rem;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
+  }
+
+  #TOC > .pj-toc-scroll-region > ul {
+    margin: 0;
+    padding-bottom: 0.75rem;
   }
 
   /* Quarto/Bootstrap ScrollSpy is the sole owner of the active state.
@@ -1800,13 +1811,20 @@ body::after {
   }
 
   #TOC .nav-link.active {
+    color: inherit !important;
+    background: transparent;
+    font-weight: 500;
+    text-shadow: none;
+  }
+
+  #TOC .nav-link.pj-toc-visible-current {
     color: color-mix(in srgb, var(--obs-accent-cyan) 48%, var(--obs-text)) !important;
     background: color-mix(in srgb, var(--obs-accent-cyan) 7%, transparent);
     font-weight: 650;
     text-shadow: 0 0 10px color-mix(in srgb, var(--obs-accent-cyan) 18%, transparent);
   }
 
-  #TOC .nav-link.active::before {
+  #TOC .nav-link.pj-toc-visible-current::before {
     content: "";
     position: absolute;
     inset: 0.18rem auto 0.18rem -0.45rem;
