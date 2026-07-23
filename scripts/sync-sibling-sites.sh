@@ -9,29 +9,68 @@ targets=(
   "$parent_dir/PersonalJournal"
 )
 
-ensure_selection_ai_include() {
+ensure_header_include() {
   local config="$1/_quarto.yml"
+  local include_file="$2"
   local temp_file
 
-  if rg -q '_extensions/serika/glass/selection-ai\.html' "$config"; then
+  if rg -Fq "$include_file" "$config"; then
     return
   fi
   if ! rg -q '_extensions/serika/glass/plotly-config\.html' "$config"; then
-    echo "error: $config の include-in-header に selection-ai.html を追加できません" >&2
+    echo "error: $config の include-in-header に $include_file を追加できません" >&2
     return 1
   fi
 
   temp_file="$(mktemp "${TMPDIR:-/tmp}/serika-quarto-yml.XXXXXX")"
-  awk '
+  awk -v include_file="$include_file" '
     { print }
     /_extensions\/serika\/glass\/plotly-config\.html/ && !added {
       match($0, /^[[:space:]]*/)
       indent = substr($0, RSTART, RLENGTH)
-      print indent "- _extensions/serika/glass/selection-ai.html"
+      print indent "- " include_file
       added = 1
     }
     END { if (!added) exit 1 }
   ' "$config" > "$temp_file"
+  mv "$temp_file" "$config"
+  echo "configured: $config"
+}
+
+ensure_network_post_render() {
+  local config="$1/_quarto.yml"
+  local hook="_extensions/serika/glass/build-network.ts"
+  local temp_file
+
+  if rg -Fq "$hook" "$config"; then
+    return
+  fi
+
+  temp_file="$(mktemp "${TMPDIR:-/tmp}/serika-quarto-yml.XXXXXX")"
+  if rg -q '^[[:space:]]+post-render:[[:space:]]*$' "$config"; then
+    awk -v hook="$hook" '
+      { print }
+      /^[[:space:]]+post-render:[[:space:]]*$/ && !added {
+        match($0, /^[[:space:]]*/)
+        indent = substr($0, RSTART, RLENGTH)
+        print indent "  - " hook
+        added = 1
+      }
+      END { if (!added) exit 1 }
+    ' "$config" > "$temp_file"
+  else
+    awk -v hook="$hook" '
+      { print }
+      /^[[:space:]]+output-dir:/ && !added {
+        match($0, /^[[:space:]]*/)
+        indent = substr($0, RSTART, RLENGTH)
+        print indent "post-render:"
+        print indent "  - " hook
+        added = 1
+      }
+      END { if (!added) exit 1 }
+    ' "$config" > "$temp_file"
+  fi
   mv "$temp_file" "$config"
   echo "configured: $config"
 }
@@ -50,7 +89,9 @@ done
 
 for target in "${targets[@]}"; do
   "$repo_root/scripts/install.sh" "$target"
-  ensure_selection_ai_include "$target"
+  ensure_header_include "$target" "_extensions/serika/glass/network.html"
+  ensure_header_include "$target" "_extensions/serika/glass/selection-ai.html"
+  ensure_network_post_render "$target"
   echo "rendering: $target"
   (cd "$target" && quarto render)
 done

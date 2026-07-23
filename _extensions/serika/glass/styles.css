@@ -1645,11 +1645,49 @@ body::after {
 }
 
 .pj-reading-orbit {
-  width: 1.7rem;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
   aspect-ratio: 1;
-  border: 1px solid var(--obs-accent-cyan);
   border-radius: 50%;
-  box-shadow: inset 0 0 0 0.35rem color-mix(in srgb, var(--obs-accent) 8%, transparent);
+  background: color-mix(in srgb, var(--obs-accent) 7%, transparent);
+}
+
+.pj-reading-orbit svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+}
+
+.pj-reading-orbit circle {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.pj-reading-orbit-track {
+  stroke: color-mix(in srgb, var(--obs-accent-cyan) 24%, var(--obs-border));
+  stroke-width: 2;
+}
+
+.pj-reading-orbit-progress {
+  stroke: var(--obs-accent-cyan);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--obs-accent-cyan) 65%, transparent));
+  transition: stroke-dashoffset 100ms linear;
+}
+
+.pj-reading-orbit-core {
+  width: 0.82rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--obs-accent) 10%, transparent);
 }
 
 .pj-reading-copy {
@@ -1688,7 +1726,7 @@ body::after {
 @media (min-width: 992px) {
   #quarto-sidebar,
   #quarto-margin-sidebar {
-    padding: 1rem 0.75rem !important;
+    padding: 0.75rem !important;
     background: transparent;
     border: 0 !important;
     border-radius: 0;
@@ -1697,9 +1735,37 @@ body::after {
     backdrop-filter: none;
   }
 
+  #quarto-margin-sidebar {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden !important;
+  }
+
   #TOC {
     position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin-top: 0 !important;
     padding-inline-start: 0.55rem;
+    overflow: hidden !important;
+  }
+
+  #TOC > #toc-title {
+    flex: 0 0 auto;
+    margin: 0.45rem 0 0.65rem;
+  }
+
+  #TOC > ul {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-bottom: 0;
+    padding-bottom: 0.75rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
   }
 
   #TOC .nav-link {
@@ -1781,6 +1847,9 @@ body::after {
   .pj-reading-progress-bar {
     transition: none;
   }
+  .pj-reading-orbit-progress {
+    transition: none;
+  }
   #title-block-header.pj-observatory-hero::before,
   .pj-observatory-hero .title,
   .pj-observatory-hero .subtitle,
@@ -1858,6 +1927,7 @@ body::after {
   .pj-title-chroma { display: none; }
   .pj-chapter > h2 { opacity: 1; transform: none; }
   .pj-reading-progress-bar { transition: none; }
+  .pj-reading-orbit-progress { transition: none; }
 }
 /* Text-selection AI action */
 .serika-selection-ai { position: absolute; z-index: 1080; display: none; font-family: inherit; }
