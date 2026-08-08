@@ -1,0 +1,11 @@
+---
+title: "Constellation edges"
+author: "Serika UI Lab"
+date: "2026-08-05"
+categories: [Network, Graph]
+description: "星図は明示リンクを実線、関連を点線で結ぶ。"
+---
+
+navbar の星図ボタンを開き、このノートが他の fixture とどう繋がるかを見る。
+
+関連: [Reading HUD](reading-hud.qmd) · [Motion tokens](motion-tokens.qmd) · [Lab hub](../index.qmd)

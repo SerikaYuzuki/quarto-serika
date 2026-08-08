@@ -1,0 +1,84 @@
+---
+title: "Interaction playground"
+subtitle: "触って確かめる遊びのカタログ"
+author: "Serika UI Lab"
+date: "2026-08-06"
+categories: [Playground, Motion, Interaction]
+description: "callout・copy・TOC・HUD・selection AI・theme切替を同じページで踏む操作カタログ。"
+---
+
+## 使い方
+
+各節の操作を一度だけ行い、装飾が常時回っていないことと、操作への応答だけが動くことを確認する。本文の段落自体にはスクロール演出を付けない。
+
+### Acceptance checklist
+
+1. Light / Dark を切り替えると色が短くクロスフェードする
+2. Callout を開くと chevron / icon が一度だけ反応する
+3. コードの copy が成功するとボタンが短く成功色になる
+4. 見出しアンカーや脚注から戻ると対象が一度だけ光る
+5. TOC の cyan marker が現在位置へ滑らかに移動する
+6. テキストを選択すると AI / copy バブルが出る
+7. `prefers-reduced-motion: reduce` では常時・応答アニメが止まる
+
+## Callout の一度きりの反応
+
+::: {.callout-note collapse="true"}
+#### 理論
+
+閉じた行を開き、左の短い accent notch・icon の一度きりの発光・chevron 回転を見る。開いたまま常時発光しないこと。
+:::
+
+::: {.callout-tip collapse="true"}
+#### 解答
+
+解答側も同じ三領域ヘッダーで、開閉のたびに一度だけ pulse する。
+:::
+
+::: {.callout-warning}
+#### Warning
+
+常時開いた callout。操作フィードバックの対象ではないが、notch と色の階層を確認する。
+:::
+
+## Code copy
+
+下のコードブロック右上の copy を押し、アイコンが成功色へ一瞬変わることを確認する。
+
+```{.js}
+function playgroundCopyProbe(left, right) {
+  return { left: left ? "open" : "closed", right: right ? "open" : "closed" };
+}
+```
+
+## Anchor と footnote
+
+[この見出しへ飛ぶ](#toc-hud)と、脚注からの復帰[^pg-note]で、対象が一度だけ highlight される。
+
+[^pg-note]: Playground 用の脚注。戻りリンクを押したとき参照元が分かる。
+
+## TOC と HUD {#toc-hud}
+
+右 TOC を表示したまま、このページをゆっくりスクロールする。cyan の sliding marker が現在の見出しへ移動し、右下の読書 HUD の章ラベルが切り替わる。
+
+### 小見出し A
+
+TOC marker と HUD の両方のラベル更新を見るための短い節。
+
+### 小見出し B
+
+さらに下へ進み、marker が A から B へ滑らかに移ることを確認する。
+
+## Selection AI
+
+次の一文をドラッグ選択し、浮かぶ ✦ AI / copy を試す。
+
+観測値と仮説を分けて書く。色や影だけに意味を置かない。
+
+## Theme 切替
+
+navbar の light / dark トグルを押し、背景と枠の色が 200ms 前後で交差することを見る。reduced motion では即時切替でよい。
+
+## 星図への導線
+
+相互リンクの星図は [Lab hub](index.qmd) の fixture posts と navbar の星図ボタンで確認する。関連ノート: [Observatory notes](posts/observatory-notes.qmd)、[Constellation edges](posts/constellation-edges.qmd)。

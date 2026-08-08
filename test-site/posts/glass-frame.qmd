@@ -1,0 +1,11 @@
+---
+title: "Glass frame"
+author: "Serika UI Lab"
+date: "2026-08-01"
+categories: [Design, Frame]
+description: "操作面にガラス、読む面に紙。枠の役割だけを短く記す。"
+---
+
+ナビ、ヒーロー、listing カードはガラス枠。本文は平面の紙。
+
+次: [Paper content](paper-content.qmd) · [Observatory notes](observatory-notes.qmd)

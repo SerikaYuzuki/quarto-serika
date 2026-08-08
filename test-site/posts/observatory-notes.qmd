@@ -1,0 +1,11 @@
+---
+title: "Observatory notes"
+author: "Serika UI Lab"
+date: "2026-08-04"
+categories: [Observatory, Lab]
+description: "Prismatic Mathematical Observatory の色と記号のメモ。"
+---
+
+チャプター記号 ∿ ∑ ƒ ∫ と cyan / violet / magenta のアクセント。
+
+関連: [Glass frame](glass-frame.qmd) · [Motion tokens](motion-tokens.qmd) · [Playground](../playground.qmd)

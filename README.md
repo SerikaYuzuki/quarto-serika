@@ -94,3 +94,19 @@ format:
 - 除外: `draft: true`、`graph: false`、`_` で始まるファイル、外部リンク
 
 ネットワーク図はnavbarの星図ボタンを押したときだけJSONを読み、Canvasの配置計算を開始する。通常の読書時には描画処理を行わない。
+
+## Listing 星座カード（任意）
+
+ブログ索引などで glass の constellation カードを使う場合、利用側の listing に次を指定する。
+
+```yaml
+listing:
+  type: custom
+  template: _extensions/serika/glass/listing-card.ejs
+  categories: true
+  sort-ui: true
+  filter-ui: true
+  fields: [title, description, date, author, categories, reading-time]
+```
+
+テンプレ正本は `_extensions/serika/glass/listing-card.ejs`。journals 側の `_templates/` コピーは正本ではなく、同期後はこのパスを参照する。

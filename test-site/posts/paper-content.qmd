@@ -1,0 +1,11 @@
+---
+title: "Paper content"
+author: "Serika UI Lab"
+date: "2026-08-02"
+categories: [Design, Typography]
+description: "本文・表・開いた callout は印刷物に近い平面へ戻す。"
+---
+
+表から blur と大きな角丸を外し、横罫と桁揃えで読む。
+
+前: [Glass frame](glass-frame.qmd) · 次: [Reading HUD](reading-hud.qmd)
