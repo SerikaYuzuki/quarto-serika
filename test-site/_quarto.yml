@@ -5,6 +5,7 @@ project:
     - _extensions/serika/glass/build-network.ts
   render:
     - "*.qmd"
+    - "posts/*.qmd"
 
 lang: ja
 
@@ -14,9 +15,15 @@ website:
     pinned: false
     left:
       - href: index.qmd
+        text: Hub
+      - href: playground.qmd
+        text: Playground
+      - href: long-read.qmd
+        text: Long read
+      - href: components.qmd
         text: Components
       - href: layout-states.qmd
-        text: Layout states
+        text: Layout
     right:
       - icon: github
         href: https://github.com/SerikaYuzuki/quarto-serika
@@ -24,10 +31,34 @@ website:
     style: docked
     search: true
     contents:
-      - href: index.qmd
-        text: Component gallery
-      - href: layout-states.qmd
-        text: Layout and motion
+      - section: "Lab"
+        contents:
+          - href: index.qmd
+            text: Hub / listing
+          - href: playground.qmd
+            text: Playground
+          - href: long-read.qmd
+            text: Long read
+      - section: "Regression"
+        contents:
+          - href: components.qmd
+            text: Component gallery
+          - href: layout-states.qmd
+            text: Layout and motion
+      - section: "Fixture posts"
+        contents:
+          - href: posts/glass-frame.qmd
+            text: Glass frame
+          - href: posts/paper-content.qmd
+            text: Paper content
+          - href: posts/reading-hud.qmd
+            text: Reading HUD
+          - href: posts/observatory-notes.qmd
+            text: Observatory notes
+          - href: posts/constellation-edges.qmd
+            text: Constellation edges
+          - href: posts/motion-tokens.qmd
+            text: Motion tokens
   page-navigation: true
   back-to-top-navigation: true
 

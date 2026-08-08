@@ -1,0 +1,11 @@
+---
+title: "Motion tokens"
+author: "Serika UI Lab"
+date: "2026-08-06"
+categories: [Motion, Tokens]
+description: "micro / disclosure / rail の時間と easing を揃える。"
+---
+
+常時ループは背景ドリフト程度に留め、操作応答は 120–280ms。
+
+関連: [Observatory notes](observatory-notes.qmd) · [Constellation edges](constellation-edges.qmd) · [Glass frame](glass-frame.qmd)

@@ -1,0 +1,11 @@
+---
+title: "Reading HUD"
+author: "Serika UI Lab"
+date: "2026-08-03"
+categories: [Motion, Reading]
+description: "進捗バーと orbit カプセルは操作への応答として動く。"
+---
+
+長文では [Long read](../long-read.qmd) で完読パルスまで確認する。
+
+関連: [Paper content](paper-content.qmd) · [Constellation edges](constellation-edges.qmd)
