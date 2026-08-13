@@ -35,14 +35,27 @@
     hub.classList.toggle('is-filtering', filtering);
 
     const sky = hub.querySelector('.gl-sky');
-    if (!sky) return;
-    if (filtering) {
-      sky.hidden = true;
-      sky.setAttribute('inert', '');
-    } else {
-      sky.hidden = false;
-      sky.removeAttribute('inert');
+    if (sky) {
+      if (filtering) {
+        sky.hidden = true;
+        sky.setAttribute('inert', '');
+      } else {
+        sky.hidden = false;
+        sky.removeAttribute('inert');
+      }
     }
+
+    // Log contains ALL posts. While sky is visible, in-sky rows stay
+    // hidden+inert (still List.js items). When filtering, they participate.
+    hub.querySelectorAll('.gl-log-row[data-in-sky="1"]').forEach((row) => {
+      if (filtering) {
+        row.hidden = false;
+        row.removeAttribute('inert');
+      } else {
+        row.hidden = true;
+        row.setAttribute('inert', '');
+      }
+    });
   }
 
   function moveToolbar(hub) {

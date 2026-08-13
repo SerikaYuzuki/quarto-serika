@@ -1017,8 +1017,9 @@ body.pj-drawer-active { overflow: hidden; }
   display: none;
 }
 
-/* Default view: sky posts are List.js items but not shown as log rows */
-.gl-hub:not(.is-filtering) .gl-log-row[data-in-sky="1"] {
+/* Default view: in-sky log rows use hidden+inert (JS + SSR).
+   !important beats List.js inline display while sky is visible. */
+.gl-hub:not(.is-filtering) .gl-log-row[data-in-sky="1"][hidden] {
   display: none !important;
 }
 

@@ -114,7 +114,7 @@ var categoriesText = cats.join(' ');
 var inSky = i < skyCount ? '1' : '0';
 var desc = (item.description && !toStr(item.description).startsWith('<!--')) ? item.description : '';
 %>
-<div class="gl-log-row" data-in-sky="<%- inSky %>" <%= metadataAttrs(item) %>>
+<div class="gl-log-row" data-in-sky="<%- inSky %>"<% if (inSky === '1') { %> hidden<% } %> <%= metadataAttrs(item) %>>
 <span class="gl-log-date listing-date"><%- fmtDate(item.date) %></span>
 <a href="<%- item.path %>" class="gl-log-title listing-title"><%- item.title %></a>
 <% if (cat0) { %>
