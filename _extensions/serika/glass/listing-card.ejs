@@ -88,9 +88,6 @@ var skyRole = isPrimary ? 'primary' : 'satellite';
 <% if (item.date) { %>
 <div class="gl-meta-col"><div class="gl-meta-lbl">PUBLISHED</div><div class="gl-meta-val listing-date"><%- fmtDate(item.date) %></div></div>
 <% } %>
-<% if (cats.length > 0) { %>
-<div class="gl-meta-col"><div class="gl-meta-lbl">CATEGORIES</div><div class="gl-cats listing-categories"><% cats.forEach(function(cat){ %><a class="gl-cat-pill" data-gl-cat="<%- catColorIdx(cat) %>" data-category="<%- encodeCategory(cat) %>" href="<%- categoryHash(cat) %>"><%- cat %></a><% }); %></div></div>
-<% } %>
 </div>
 </article>
 </div>

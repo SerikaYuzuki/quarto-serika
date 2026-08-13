@@ -4,8 +4,20 @@
     return (hub && hub.closest('.quarto-listing')) || document.getElementById('listing-listing');
   }
 
+  function decodeListingCategory(encoded) {
+    if (encoded == null || encoded === '') return '';
+    try {
+      return decodeURIComponent(atob(encoded));
+    } catch (_) {
+      return '';
+    }
+  }
+
   function categoryIsActive() {
-    return !!document.querySelector('.quarto-listing-category .category.active');
+    // Quarto's "All" chip can be .active with empty data-category — that is not filtering.
+    const active = document.querySelector('.quarto-listing-category .category.active');
+    if (!active) return false;
+    return decodeListingCategory(active.getAttribute('data-category')) !== '';
   }
 
   function searchIsActive(root) {
