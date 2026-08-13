@@ -5,6 +5,7 @@ author: "Serika UI Lab"
 date: "2026-08-06"
 categories: [Lab, Showcase]
 description: "ガラス枠と紙の本文、星座カードと星図を同じfixtureで触って確かめるラボ。"
+# Hub listing: custom EJS splits into 今夜の空 (sky cards) + 観測ログ (paper log).
 listing:
   contents: posts
   sort: "date desc"
