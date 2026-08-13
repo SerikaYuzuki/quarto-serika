@@ -91,6 +91,7 @@ for target in "${targets[@]}"; do
   "$repo_root/scripts/install.sh" "$target"
   ensure_header_include "$target" "_extensions/serika/glass/network.html"
   ensure_header_include "$target" "_extensions/serika/glass/selection-ai.html"
+  ensure_header_include "$target" "_extensions/serika/glass/listing-hub.html"
   ensure_network_post_render "$target"
   echo "rendering: $target"
   (cd "$target" && quarto render)
